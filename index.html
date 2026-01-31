@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<title>ヨルシカ ギターチェック</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --yorushika-main: #7fa6c9;   /* 空っぽい青 */
+  --yorushika-sub:  #cfddeb;   /* 薄い青グレー */
+  --yorushika-bg:   #f7f9fc;   /* 夜明け前の白 */
+  --yorushika-text: #2f3a4a;   /* 真っ黒じゃない文字 */
+}
+body {
+  font-family:
+    "Noto Sans JP",
+    "Hiragino Sans",
+    "Hiragino Kaku Gothic ProN",
+    "Yu Gothic",
+    "Yu Gothic Medium",
+    sans-serif;
+
+  background: var(--yorushika-bg);
+  color: var(--yorushika-text);
+  font-weight: 400;
+  line-height: 1.9;
+}
+#progress-bar {
+  background: #e6edf5;
+}
+
+#progress-fill {
+  background: linear-gradient(
+    90deg,
+    var(--yorushika-main),
+    var(--yorushika-sub)
+  );
+}
+.section-tag {
+  background: var(--yorushika-sub);
+  color: var(--yorushika-text);
+  border: 1px solid #dde6f0;
+}
+
+.section-tag input:checked + span {
+  font-weight: bold;
+}
+.song {
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: #2f5d8a;
+}
+.song:hover {
+  text-decoration: underline;
+}
+.section-box {
+  margin-left: 28px;
+  margin-top: 6px;
+  display: none;
+}
+
+.section-tag {
+  display: inline-block;
+  margin: 4px 6px 4px 0;
+  padding: 4px 10px;
+  border-radius: 14px;
+  background: #f2f2f2;
+  font-size: 13px;
+}
+.section-tag input {
+  margin-right: 4px;
+}
+#progress-area {
+  margin: 16px 0;
+}
+
+#progress-text {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+#progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+#progress-fill {
+  height: 100%;
+  width: 0%;
+  background: #76c7c0;
+  transition: width 0.3s;
+}
+h2 {
+  font-family: "Shippori Mincho B1", serif;
+  font-weight: 500;
+  font-size: 32px;   /* ← ここだけ大きく */
+  letter-spacing: 0.18em;
+  color: #2f3a4a;
+  margin: 36px 0 24px;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("yorushika-logo.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 420px;
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: -1;
+}
+h2.title {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+
+h2.title::after {
+  content: "";
+  width: 68px;
+  height: 68px;
+  background-image: url("yorushika-mark.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.7;
+
+  margin-top: 9px;
+}
+@media (max-width: 600px) {
+  body {
+    font-size: 14px;           /* 本文少し小さく */
+    line-height: 1.7;          /* 行間も少し狭く */
+  }
+
+  h2.title {
+    font-size: 26px;           /* タイトル小さめ */
+  }
+
+  h2.title::after {
+    width: 36px;               /* ロゴも小さく */
+    height: 36px;
+    transform: translateY(3px); /* 位置調整 */
+    opacity: 0.6;              /* 少し薄く */
+  }
+
+  .song {
+    font-size: 15px;           /* 曲名を少し小さく */
+  }
+
+  .section-tag {
+    font-size: 11px;           /* タグも小さく */
+    padding: 3px 8px;
+    margin: 3px 4px 3px 0;
+  }
+
+  #progress-bar {
+    height: 14px;              /* 進捗バーを少し細く */
+  }
+}
+</style>
+</head>
+
+<body>
+<h2 class="title">ヨルシカ</h2>
+<div id="progress-area">
+  <div id="progress-text"></div>
+  <div id="progress-bar">
+    <div id="progress-fill"></div>
+  </div>
+</div>
+<div id="list"></div>
+
+<script>
+const songs = [
+{ title: "カトレア" },
+{ title: "言って。" },
+{ title: "あの夏に咲け" },
+{ title: "靴の花火" },
+{ title: "雲と幽霊" },
+{ title: "負け犬にアンコールはいらない" },
+{ title: "爆弾魔" },
+{ title: "ヒッチコック" },
+{ title: "準透明少年" },
+{ title: "ただ君に晴れ" },
+{ title: "冬眠" },
+{ title: "藍二乗" },
+{ title: "八月、某、月明かり" },
+{ title: "詩書きとコーヒー" },
+{ title: "踊ろうぜ" },
+{ title: "六月は雨上がりの街を書く" },
+{ title: "五月は花緑青の窓辺から" },
+{ title: "夜紛い" },
+{ title: "パレード" },
+{ title: "エルマ" },
+{ title: "だから僕は音楽を辞めた" },
+{ title: "憂一乗" },
+{ title: "夕凪、某、花惑い" },
+{ title: "雨とカプチーノ" },
+{ title: "神様のダンス" },
+{ title: "雨晴るる" },
+{ title: "歩く" },
+{ title: "心に穴が空いた" },
+{ title: "声" },
+{ title: "エイミー" },
+{ title: "ノーチラス" },
+{ title: "昼鳶" },
+{ title: "春ひさぎ" },
+{ title: "爆弾魔（Re-Recording）" },
+{ title: "レプリカント" },
+{ title: "花人局" },
+{ title: "盗作" },
+{ title: "思想犯" },
+{ title: "逃亡" },
+{ title: "夜行" },
+{ title: "花に亡霊" },
+{ title: "強盗と花束" },
+{ title: "春泥棒" },
+{ title: "風を食む" },
+{ title: "嘘月" },
+{ title: "夏の肖像" },
+{ title: "都落ち" },
+{ title: "ブレーメン" },
+{ title: "チノカテ" },
+{ title: "月に吠える" },
+{ title: "451" },
+{ title: "パドドゥ" },
+{ title: "又三郎" },
+{ title: "靴の花火（Re-Recording）" },
+{ title: "老人と海" },
+{ title: "さよならモルテン" },
+{ title: "いさな" },
+{ title: "左右盲" },
+{ title: "アルジャーノン" },
+{ title: "テレパス" },
+{ title: "斜陽" },
+{ title: "月光浴" },
+{ title: "晴る" },
+{ title: "ルバート" },
+{ title: "忘れてください" },
+{ title: "アポリア" },
+{ title: "太陽" },
+{ title: "へび" },
+{ title: "火星人" },
+{ title: "修羅" },
+{ title: "プレイシック" },
+{ title: "Make-up shadow" },
+{ title: "憂、燦々" },
+{ title: "DARMA GRAND PRIX" },];
+
+const sections = ["イントロ", "Aメロ", "Bメロ", "サビ", "ギターソロ"];
+const list = document.getElementById("list");
+
+songs.forEach(song => {
+  // 曲チェック
+  const songCheck = document.createElement("input");
+  songCheck.type = "checkbox";
+  songCheck.checked = localStorage.getItem(song.title) === "true";
+ songCheck.onchange = () => {
+  localStorage.setItem(song.title, songCheck.checked);
+  updateProgress();
+};
+
+  // 曲名
+  const title = document.createElement("span");
+  title.textContent = " " + song.title;
+  title.className = "song";
+
+  // セクション箱
+  const box = document.createElement("div");
+  box.className = "section-box";
+
+  sections.forEach(sec => {
+    const key = song.title + "_" + sec;
+
+    const label = document.createElement("label");
+    label.className = "section-tag";
+
+    const check = document.createElement("input");
+    check.type = "checkbox";
+    check.checked = localStorage.getItem(key) === "true";
+   check.onchange = () => {
+  localStorage.setItem(key, check.checked);
+  checkSongComplete(song.title, songCheck);
+};
+
+    label.append(check, sec);
+    box.append(label);
+  });
+checkSongComplete(song.title, songCheck);
+  // 開閉
+  title.onclick = () =>
+    box.style.display = box.style.display ? "" : "block";
+
+  const songRow = document.createElement("div");
+
+songRow.append(songCheck, title);
+songRow.append(box);
+
+list.append(songRow);
+});
+function updateProgress() {
+  const total = songs.length;
+  let checked = 0;
+
+  songs.forEach(song => {
+    if (localStorage.getItem(song.title) === "true") {
+      checked++;
+    }
+  });
+
+  const percent = Math.round((checked / total) * 100);
+
+  document.getElementById("progress-text").textContent =
+    `進捗：${checked} / ${total} 曲（${percent}%）`;
+
+  document.getElementById("progress-fill").style.width =
+    percent + "%";
+}
+updateProgress();
+function checkSongComplete(title, songCheck) {
+  const allChecked = sections.every(sec =>
+    localStorage.getItem(title + "_" + sec) === "true"
+  );
+
+  songCheck.checked = allChecked;
+  localStorage.setItem(title, allChecked);
+
+  updateProgress();
+}
+</script>
+</body>
+</html>
