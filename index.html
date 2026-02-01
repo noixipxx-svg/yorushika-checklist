@@ -170,6 +170,13 @@ h2.title::after {
 
 <body>
 <h2 class="title">ヨルシカChecklist</h2>
+<div id="filter">
+  <button onclick="filterSongs('all')">全て</button>
+  <button onclick="filterSongs('acoustic-only')">アコギのみ</button>
+  <button onclick="filterSongs('electric-only')">エレキのみ</button>
+  <button onclick="filterSongs('both')">両方</button>
+  <button onclick="filterSongs('downtune')">ダウンチューニング</button>
+</div>
 <div id="progress-area">
   <div id="progress-text"></div>
   <div id="progress-bar">
@@ -180,84 +187,84 @@ h2.title::after {
 
 <script>
 const songs = [
-{ title: "カトレア" },
-{ title: "言って。" },
-{ title: "あの夏に咲け" },
-{ title: "靴の花火" },
-{ title: "雲と幽霊" },
-{ title: "負け犬にアンコールはいらない" },
-{ title: "爆弾魔" },
-{ title: "ヒッチコック" },
-{ title: "準透明少年" },
-{ title: "ただ君に晴れ" },
-{ title: "冬眠" },
-{ title: "藍二乗" },
-{ title: "八月、某、月明かり" },
-{ title: "詩書きとコーヒー" },
-{ title: "踊ろうぜ" },
-{ title: "六月は雨上がりの街を書く" },
-{ title: "五月は花緑青の窓辺から" },
-{ title: "夜紛い" },
-{ title: "パレード" },
-{ title: "エルマ" },
-{ title: "だから僕は音楽を辞めた" },
-{ title: "憂一乗" },
-{ title: "夕凪、某、花惑い" },
-{ title: "雨とカプチーノ" },
-{ title: "神様のダンス" },
-{ title: "雨晴るる" },
-{ title: "歩く" },
-{ title: "心に穴が空いた" },
-{ title: "声" },
-{ title: "エイミー" },
-{ title: "ノーチラス" },
-{ title: "昼鳶" },
-{ title: "春ひさぎ" },
-{ title: "爆弾魔（Re-Recording）" },
-{ title: "レプリカント" },
-{ title: "花人局" },
-{ title: "盗作" },
-{ title: "思想犯" },
-{ title: "逃亡" },
-{ title: "夜行" },
-{ title: "花に亡霊" },
-{ title: "強盗と花束" },
-{ title: "春泥棒" },
-{ title: "風を食む" },
-{ title: "嘘月" },
-{ title: "夏の肖像" },
-{ title: "都落ち" },
-{ title: "ブレーメン" },
-{ title: "チノカテ" },
-{ title: "月に吠える" },
-{ title: "451" },
-{ title: "パドドゥ" },
-{ title: "又三郎" },
-{ title: "靴の花火（Re-Recording）" },
-{ title: "老人と海" },
-{ title: "さよならモルテン" },
-{ title: "いさな" },
-{ title: "左右盲" },
-{ title: "アルジャーノン" },
-{ title: "第一夜" },
-{ title: "テレパス" },
-{ title: "斜陽" },
-{ title: "月光浴" },
-{ title: "晴る" },
-{ title: "ルバート" },
-{ title: "忘れてください" },
-{ title: "アポリア" },
-{ title: "太陽" },
-{ title: "へび" },
-{ title: "火星人" },
-{ title: "修羅" },
-{ title: "プレイシック" },
-{ title: "茜" },
-{ title: "Make-up shadow" },
-{ title: "憂、燦々" },
-{ title: "DARMA GRAND PRIX" },];
+{ title: "カトレア", tags: ["electric"] },
+{ title: "言って。", tags: ["electric"] },
+{ title: "あの夏に咲け", tags: ["electric"] },
+{ title: "靴の花火", tags: ["electric"] },
+{ title: "雲と幽霊", tags: ["electric","acoustic"] },
+{ title: "負け犬にアンコールはいらない", tags: ["electric"] },
+{ title: "爆弾魔", tags: ["electric"] },
+{ title: "ヒッチコック", tags: ["electric","halftone"] },
+{ title: "準透明少年", tags: ["electric"] },
+{ title: "ただ君に晴れ", tags: ["electric"] },
+{ title: "冬眠", tags: ["electric"] },
+{ title: "藍二乗", tags: ["electric","halftone"] },
+{ title: "八月、某、月明かり", tags: ["electric"] },
+{ title: "詩書きとコーヒー", tags: ["electric","halftone"] },
+{ title: "踊ろうぜ", tags: ["electric","halftone"] },
+{ title: "六月は雨上がりの街を書く", tags: ["electric"] },
+{ title: "五月は花緑青の窓辺から", tags: ["electric","halftone"] },
+{ title: "夜紛い", tags: ["electric"] },
+{ title: "パレード", tags: ["electric"] },
+{ title: "エルマ", tags: ["electric","acoustic"] },
+{ title: "だから僕は音楽を辞めた", tags: ["electric","acoustic"] },
+{ title: "憂一乗", tags: ["acoustic"] },
+{ title: "夕凪、某、花惑い", tags: ["electric","halftone"] },
+{ title: "雨とカプチーノ", tags: ["electric","halftone"] },
+{ title: "神様のダンス", tags: ["electric"] },
+{ title: "雨晴るる", tags: ["electric"] },
+{ title: "歩く", tags: ["electric"] },
+{ title: "心に穴が空いた", tags: ["electric"] },
+{ title: "声", tags: ["electric","halftone"] },
+{ title: "エイミー", tags: ["electric","acoustic","halftone"] },
+{ title: "ノーチラス", tags: ["electric","acoustic","halftone"] },
+{ title: "昼鳶", tags: ["acoustic","electric","halftone"] },
+{ title: "春ひさぎ", tags: ["electric"] },
+{ title: "爆弾魔（Re-Recording）", tags: ["electric"] },
+{ title: "レプリカント", tags: ["electric"] },
+{ title: "花人局", tags: ["electric","halftone"] },
+{ title: "盗作", tags: ["electric"] },
+{ title: "思想犯", tags: ["electric"] },
+{ title: "逃亡", tags: ["acoustic","electric"] },
+{ title: "夜行", tags: ["acoustic"] },
+{ title: "花に亡霊", tags: ["electric"] },
+{ title: "強盗と花束", tags: ["electric"] },
+{ title: "春泥棒", tags: ["acoustic"] },
+{ title: "風を食む", tags: ["acoustic"] },
+{ title: "嘘月", tags: ["electric","acoustic"] },
+{ title: "夏の肖像", tags: ["electric","acoustic"] },
+{ title: "都落ち", tags: ["electric","acoustic"] },
+{ title: "ブレーメン", tags: ["electric"] },
+{ title: "チノカテ", tags: ["electric","acoustic"] },
+{ title: "月に吠える", tags: ["electric"] },
+{ title: "451", tags: ["electric"] },
+{ title: "パドドゥ", tags: ["electric","acoustic"] },
+{ title: "又三郎", tags: ["electric"] },
+{ title: "靴の花火（Re-Recording）", tags: ["electric","acoustic"] },
+{ title: "老人と海", tags: ["electric"] },
+{ title: "さよならモルテン", tags: ["electric"] },
+{ title: "いさな", tags: ["electric"] },
+{ title: "左右盲", tags: ["electric","acoustic"] },
+{ title: "アルジャーノン", tags: ["electric","acoustic"] },
+{ title: "第一夜", tags: ["acoustic"] },
+{ title: "テレパス", tags: ["electric"] },
+{ title: "斜陽", tags: ["electric","acoustic"] },
+{ title: "月光浴", tags: ["acoustic"] },
+{ title: "晴る", tags: ["electric"] },
+{ title: "ルバート", tags: ["electric"] },
+{ title: "忘れてください", tags: ["acoustic"] },
+{ title: "アポリア", tags: ["acoustic"] },
+{ title: "太陽", tags: ["electric","acoustic"] },
+{ title: "へび", tags: ["electric"] },
+{ title: "火星人", tags: ["electric"] },
+{ title: "修羅", tags: ["electric"] },
+{ title: "プレイシック", tags: ["electric"] },
+{ title: "茜", tags: ["electric"] },
+{ title: "Make-up shadow", tags: ["electric","acoustic"] },
+{ title: "憂、燦々", tags: ["electric","acoustic"] },
+{ title: "DARMA GRAND PRIX", tags: ["electric"] },];
 
-const sections = ["イントロ", "Aメロ", "Bメロ", "サビ", "ギターソロ"];
+const sections = ["イントロ", "A", "B", "サビ", "ギターソロ"];
 const list = document.getElementById("list");
 
 songs.forEach(song => {
@@ -337,6 +344,25 @@ function checkSongComplete(title, songCheck) {
 
   updateProgress();
 }
-</script>
+function filterSongs(tag) {
+  const songRows = document.querySelectorAll("#list > div");
+  songRows.forEach((row, i) => {
+    const song = songs[i];
+
+    if (tag === "all") {
+      row.style.display = "block";
+    } else if (tag === "downtune") {
+      row.style.display = (song.tags.includes("dropD") || song.tags.includes("halftone")) ? "block" : "none";
+    } else if (tag === "acoustic-only") {
+      row.style.display = (song.tags.includes("acoustic") && !song.tags.includes("electric")) ? "block" : "none";
+    } else if (tag === "electric-only") {
+      row.style.display = (song.tags.includes("electric") && !song.tags.includes("acoustic")) ? "block" : "none";
+    } else if (tag === "both") {
+      row.style.display = (song.tags.includes("acoustic") && song.tags.includes("electric")) ? "block" : "none";
+    } else {
+      row.style.display = song.tags.includes(tag) ? "block" : "none";
+    }
+  });
+}</script>
 </body>
 </html>
